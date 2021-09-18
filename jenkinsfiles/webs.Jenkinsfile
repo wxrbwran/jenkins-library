@@ -1,3 +1,5 @@
+@@Library('jenkins-libs-web@master') _
+
 pipeline {
 
     agent {
@@ -96,25 +98,15 @@ pipeline {
 
     post {
       always {
-        echo "构建结束"
+        tools.PrintMes("构建结束","blue")
       }
 
       success {
-        echo "构建成功"
-          git branch: "${BRANCH_NAME}",
-           credentialsId: 'gitlab-ssh-key',
-           url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
-          script{
-            if (env.BRANCH == "master") {
-              def GIT_TAG = new Date().format(“yyyyMMddHHmmss”);
-              git tag -a -m “${GIT_TAG}” ${GIT_TAG}
-              git push origin --tags
-            }
-          }
+         tools.PrintMes("构建成功","green")
       }
 
       failure {
-        echo "构建失败"
+         tools.PrintMes("构建失败","red")
       }
 
       aborted {
