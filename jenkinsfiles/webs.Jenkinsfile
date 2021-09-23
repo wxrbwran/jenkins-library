@@ -1,4 +1,9 @@
-@@Library('jenkins-libs-web@master') _
+@Library('jenkins-libs-web@master') _
+
+def gitlab = new com.xzlcorp.gitlab()
+def tools = new com.xzlcorp.tools()
+
+String Project_Name = "xzl-webs"
 
 pipeline {
 
@@ -71,29 +76,29 @@ pipeline {
           }
         }
 
-        stage('build') {
-          steps {
-            sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
-            sh "pnpm install --registry=https://registry.npm.taobao.org"
-            sh "${BUILD_SH}"
-          }
-        }
+        // stage('build') {
+        //   steps {
+        //     sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
+        //     sh "pnpm install --registry=https://registry.npm.taobao.org"
+        //     sh "${BUILD_SH}"
+        //   }
+        // }
 
-        stage('deploy') {
-          steps {
-            script {
-              if (env.BRANCH_NAME == 'master') {
-                sh "AutoBuilder transfer  --rp ./${DIST} --wp *"
-                } else {
-                sshagent(credentials: ['jenkins-self-ssh-key']) {
-                    sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "rm -rf ${ROOT_PATH} || true"'
-                    sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "mkdir -p ${ROOT_PATH} || true"'
-                    sh 'scp -o StrictHostKeyChecking=no -r ./${DIST}/* xinzhilici@${TARGET_HOST_IP}:"${ROOT_PATH}"'
-                }
-              }
-            }
-          }
-        }
+        // stage('deploy') {
+        //   steps {
+        //     script {
+        //       if (env.BRANCH_NAME == 'master') {
+        //         sh "AutoBuilder transfer  --rp ./${DIST} --wp *"
+        //         } else {
+        //         sshagent(credentials: ['jenkins-self-ssh-key']) {
+        //             sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "rm -rf ${ROOT_PATH} || true"'
+        //             sh 'ssh -o StrictHostKeyChecking=no -l xinzhilici ${TARGET_HOST_IP} "mkdir -p ${ROOT_PATH} || true"'
+        //             sh 'scp -o StrictHostKeyChecking=no -r ./${DIST}/* xinzhilici@${TARGET_HOST_IP}:"${ROOT_PATH}"'
+        //         }
+        //       }
+        //     }
+        //   }
+        // }
     }
 
     post {
@@ -102,7 +107,9 @@ pipeline {
       }
 
       success {
-         tools.PrintMes("构建成功","green")
+        tools.PrintMes("构建成功","green")
+        projectId = gitlab.GetProjectID(projectName)
+        println(projectId)
       }
 
       failure {
