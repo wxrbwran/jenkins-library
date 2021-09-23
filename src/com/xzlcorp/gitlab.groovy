@@ -1,4 +1,4 @@
-package org.devops
+package com.xzlcorp
 
 //封装HTTP请求
 def HttpReq(reqType,reqUrl,reqBody){
