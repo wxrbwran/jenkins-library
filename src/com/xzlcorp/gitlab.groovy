@@ -3,7 +3,7 @@ package com.xzlcorp
 //封装HTTP请求
 def HttpReq(reqType,reqUrl,reqBody){
     def gitServer = "https://git.xzlcorp.com/api/v4"
-    withCredentials([string(credentialsId: 'corp-gitlab-jenkins-acesstoken', variable: 'gitlabToken')]) {
+    withCredentials([string(credentialsId: 'corp-git', variable: 'gitlabToken')]) {
       result = httpRequest customHeaders: [[maskValue: true, name: 'PRIVATE-TOKEN', value: "${gitlabToken}"]], 
                 httpMode: reqType, 
                 contentType: "APPLICATION_JSON",
