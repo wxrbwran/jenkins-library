@@ -57,7 +57,7 @@ def GetProjectID(projectName){
     def result = readJSON text: """${response.content}"""
     
     for (repo in result){
-        println(repo)
+        // println(repo)
         if (repo['path'] == "${projectName}"){
             repoId = repo['id']
             println(repoId)
@@ -110,10 +110,10 @@ def SearchProjectBranches(projectId,searchKey){
         for (branch in branchInfo){
             //println(branch)
             branches[projectId] += ["branchName":branch["name"],
-                                    "commitMes":branch["commit"]["message"],
-                                    "commitId":branch["commit"]["id"],
-                                    "merged": branch["merged"],
-                                    "createTime": branch["commit"]["created_at"]]
+                "commitMes":branch["commit"]["message"],
+                "commitId":branch["commit"]["id"],
+                "merged": branch["merged"],
+                "createTime": branch["commit"]["created_at"]]
         }
         return branches
     }
@@ -123,4 +123,12 @@ def SearchProjectBranches(projectId,searchKey){
 def AcceptMr(projectId,mergeId){
     def apiUrl = "projects/${projectId}/merge_requests/${mergeId}/merge"
     HttpReq('PUT',apiUrl,'')
+}
+
+//创建tag
+def CreateTag(projectId, tag, branchName){
+    def apiUrl = "projects/${projectId}/repository/tags"
+    reqBody = """{"tag_name": "v${tag}","ref":"${branchName}", "message": "${branchName}"}"""
+    response = HttpReq('POST',apiUrl,reqBody)
+    println(response)
 }
