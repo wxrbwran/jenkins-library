@@ -128,7 +128,7 @@ def AcceptMr(projectId,mergeId){
 //创建tag
 def CreateTag(projectId, tag, branchName){
     def apiUrl = "projects/${projectId}/repository/tags"
-    reqBody = """{"tag_name": "v${tag}","ref":"${branchName}", "message": "${branchName}"}"""
+    reqBody = """{"tag_name": "${tag}","ref":"${branchName}", "message": "${branchName}"}"""
     response = HttpReq('POST',apiUrl,reqBody)
     println(response)
 }
