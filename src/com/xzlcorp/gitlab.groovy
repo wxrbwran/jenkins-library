@@ -57,9 +57,8 @@ def GetProjectID(projectName){
     def result = readJSON text: """${response.content}"""
     
     for (repo in result){
-       // println(repo['path_with_namespace'])
+        println(repo)
         if (repo['path'] == "${projectName}"){
-            
             repoId = repo['id']
             println(repoId)
         }
