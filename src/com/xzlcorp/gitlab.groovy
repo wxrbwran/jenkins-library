@@ -16,6 +16,14 @@ def HttpReq(reqType,reqUrl,reqBody){
     return result
 }
 
+//创建tag
+def CreateTag(projectId, tag, branchName){
+    def apiUrl = "projects/${projectId}/repository/tags"
+    reqBody = """{"tag_name": "${tag}","ref":"${branchName}", "message": "${branchName}"}"""
+    response = HttpReq('POST',apiUrl,reqBody)
+    println(response)
+}
+
 
 //更新文件内容
 def UpdateRepoFile(projectId,filePath,fileContent){
@@ -125,10 +133,3 @@ def AcceptMr(projectId,mergeId){
     HttpReq('PUT',apiUrl,'')
 }
 
-//创建tag
-def CreateTag(projectId, tag, branchName){
-    def apiUrl = "projects/${projectId}/repository/tags"
-    reqBody = """{"tag_name": "${tag}","ref":"${branchName}", "message": "${branchName}"}"""
-    response = HttpReq('POST',apiUrl,reqBody)
-    println(response)
-}
