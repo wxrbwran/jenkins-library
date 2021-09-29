@@ -48,14 +48,14 @@ def CreateTag(projectId, tag, branchName){
 // 获取项目commits列表
 def GetProjectCommitList(projectId, branchName){
     commitApi = "projects/${projectId}/repository/commits?ref_name=${branchName}"
-    response = HttpReq('get',commitApi,'')
+    response = HttpReq('GET',commitApi,'')
     return response
 }
 
 // 获取单个commit的diff
 def GetProjectCommitDiff(projectId, commitSha){
     commitApi = "projects/${projectId}/repository/commits/${commitSha}/diff"
-    response = HttpReq('get',commitApi,'')
+    response = HttpReq('GET',commitApi,'')
     return response
 }
 
