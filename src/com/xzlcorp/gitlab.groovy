@@ -170,6 +170,6 @@ def GetProjectFileTree(projectId, branchName, path){
     }
     def url = "projects/${projectId}/repository/tree?ref=${branchName}&path=${path}"
     
-    response = HttpReq('GET',url,'')
-    return response
+    response = HttpReq('GET',url)
+    return response.content
 }
