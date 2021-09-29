@@ -16,6 +16,22 @@ def HttpReq(reqType,reqUrl,reqBody){
     return result
 }
 
+//获取项目ID
+def GetProjectID(projectName){
+    projectApi = "projects?search=${projectName}"
+    response = HttpReq('GET',projectApi,'')
+    def result = readJSON text: """${response.content}"""
+    
+    for (repo in result){
+        // println(repo)
+        if (repo['path'] == "${projectName}"){
+            repoId = repo['id']
+            println(repoId)
+        }
+    }
+    return repoId
+}
+
 //创建tag
 def CreateTag(projectId, tag, branchName){
     def apiUrl = "projects/${projectId}/repository/tags"
@@ -24,6 +40,37 @@ def CreateTag(projectId, tag, branchName){
     println(response)
 }
 
+/**
+**
+* commit
+*/
+
+// 获取项目commits列表
+def GetProjectCommitLis(projectId, branchName){
+    commitApi = "projects/${projectId}/repository/commits?ref_name=${branchName}"
+    response = HttpReq('get',commitApi,'')
+    return response
+}
+
+// 获取单个commit的diff
+def GetProjectCommitLis(projectId, commitSha){
+    commitApi = "projects/${projectId}/repository/commits/${commitSha}/diff"
+    response = HttpReq('get',commitApi,'')
+    return response
+}
+
+//更改提交状态
+def ChangeCommitStatus(projectId,commitSha,status){
+    commitApi = "projects/${projectId}/statuses/${commitSha}?state=${status}"
+    response = HttpReq('POST',commitApi,'')
+    println(response)
+    return response
+}
+
+
+/**
+* 文件
+*/
 
 //更新文件内容
 def UpdateRepoFile(projectId,filePath,fileContent){
@@ -47,31 +94,6 @@ def CreateRepoFile(projectId,filePath,fileContent){
     reqBody = """{"branch": "master","encoding":"base64", "content": "${fileContent}", "commit_message": "create a new file"}"""
     response = HttpReq('POST',apiUrl,reqBody)
     println(response)
-}
-
-
-//更改提交状态
-def ChangeCommitStatus(projectId,commitSha,status){
-    commitApi = "projects/${projectId}/statuses/${commitSha}?state=${status}"
-    response = HttpReq('POST',commitApi,'')
-    println(response)
-    return response
-}
-
-//获取项目ID
-def GetProjectID(projectName){
-    projectApi = "projects?search=${projectName}"
-    response = HttpReq('GET',projectApi,'')
-    def result = readJSON text: """${response.content}"""
-    
-    for (repo in result){
-        // println(repo)
-        if (repo['path'] == "${projectName}"){
-            repoId = repo['id']
-            println(repoId)
-        }
-    }
-    return repoId
 }
 
 //删除分支

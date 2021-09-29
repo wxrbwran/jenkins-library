@@ -9,7 +9,7 @@ def BuildAndDeployWebProject(project) {
   // dev test master
   println("当前构建分支为： ${BRANCH_NAME}");
 
-  env.BRANCH_NAME = "dev"
+  // env.BRANCH_NAME = "dev"
 
   if (BRANCH_NAME == 'master') {
     env.BUILD_SH = "pnpm dist:${project}"
