@@ -116,12 +116,13 @@ def call(params){
         success {
           // echo "构建成功"
           script {
-            if (env.BRANCH == "master") {
-              tool.PrintMsg("打tag start","blue")
-              String tagString = "v${new Date().format("yy.MMdd.HHmm")}"
-              gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
-              tool.PrintMsg("打tag end","blue")
-            }
+            tool.TagIt(projectId, env.BRANCH_NAME);
+          //   if (env.BRANCH == "master") {
+          //     tool.PrintMsg("打tag start","blue")
+          //     String tagString = "v${new Date().format("yy.MMdd.HHmm")}"
+          //     gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+          //     tool.PrintMsg("打tag end","blue")
+          //   }
           }
         }
 

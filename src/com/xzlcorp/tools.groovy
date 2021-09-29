@@ -36,3 +36,13 @@ def ShowTriggerUser(env) {
         currentBuild.description = "Trigger by Gitlab"
     }
 }
+
+def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmm")}") {
+    if (branchName == "master") {
+        PrintMsg("打tag start","blue")
+        gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+        PrintMsg("打tag end","blue")
+    } else {
+        PrintMsg("不是master,不打了","blue")
+    }
+}
