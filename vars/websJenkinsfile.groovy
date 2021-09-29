@@ -6,11 +6,7 @@ def call(params){
   def tool = new com.xzlcorp.tools()
   def webs = new com.xzlcorp.webs()
 
-  if (env.BUILD_USER != null) {
-    currentBuild.description = "Trigger by ${env.BUILD_USER}"
-  } else {
-    currentBuild.description = "Trigger by Gitlab"
-  }
+  tool.ShowTriggerUser(env)
 
   def projects = []
   def banned = ["shared"]

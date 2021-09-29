@@ -25,3 +25,11 @@ def JSON2Obj(jsonString) {
 def Obj2JSON(dataObject) {
     return JsonOutput.toJson(dataObject)
 }
+
+def ShowTriggerUser(env) {
+    if (env.BUILD_USER != null) {
+        currentBuild.description = "Trigger by ${env.BUILD_USER}"
+    } else {
+        currentBuild.description = "Trigger by Gitlab"
+    }
+}
