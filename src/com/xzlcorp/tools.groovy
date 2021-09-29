@@ -3,6 +3,7 @@ package com.xzlcorp
 import groovy.json.JsonSlurper
 import groovy.json.JsonSlurperClassic
 import groovy.json.JsonOutput
+import groovy.json.JsonGenerator.Options
 
 //格式化输出
 def PrintMsg(value,color){
