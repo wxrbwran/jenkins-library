@@ -67,7 +67,6 @@ def ChangeCommitStatus(projectId,commitSha,status){
     return response
 }
 
-
 /**
 * 文件
 */
@@ -155,3 +154,22 @@ def AcceptMr(projectId,mergeId){
     HttpReq('PUT',apiUrl,'')
 }
 
+/**
+**
+* Repositories API
+*/
+
+// 文件tree列表
+
+def GetProjectFileTree(projectId, branchName, path){
+    if (branchName == null) {
+        branchName = "master"
+    }
+    if (path == null) {
+        path = ""
+    }
+    def url = "projects/${projectId}/repository/tree?ref=${branchName}&path=${path}"
+    
+    response = HttpReq('GET',url,'')
+    return response
+}
