@@ -22,6 +22,6 @@ def JSON2Obj(jsonString) {
     return new JsonSlurperClassic().parseText(jsonString)
 }
 
-def Obj2JSON(obj) {
-    new Options().disableUnicodeEscaping().build().toJson(obj)
+def Obj2JSON(dataObject) {
+    return JsonOutput.toJson(dataObject)
 }
