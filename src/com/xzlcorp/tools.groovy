@@ -22,10 +22,13 @@ def JSON2Obj(jsonString) {
     return new JsonSlurperClassic().parseText(jsonString)
 }
 
+// Object 转为 JSON String 
+
 def Obj2JSON(dataObject) {
     return JsonOutput.toJson(dataObject)
 }
 
+// 显示触发构建者
 def ShowTriggerUser(env) {
     if (env.BUILD_USER != null) {
         currentBuild.description = "Trigger by ${env.BUILD_USER}"
