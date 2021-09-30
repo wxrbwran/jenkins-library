@@ -53,7 +53,7 @@ def DingItMarkdown(params, env) {
         type:'MARKDOWN',
         atAll: params.atAll,
         text: [
-            "# ${params.projectName}构建成功"
+            "# ${params.projectName}构建成功",
             "---",
             "> 详情"
             "- 分支: ${env.BRANCH_NAME}",
