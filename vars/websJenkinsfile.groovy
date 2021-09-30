@@ -118,7 +118,7 @@ def call(params){
             tool.TagIt(projectId, env.BRANCH_NAME);
           }
           dingtalk (
-            robot: '2ef24721-68a1-4b41-b312-1d8bfad05a70',
+            robot: 'jenkinsDingTalkForWebs',
             type:'MARKDOWN',
             atAll: false,
             title: "xzl-webs/${BRANCH_NAME}构建成功。",
