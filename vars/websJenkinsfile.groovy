@@ -111,6 +111,7 @@ def call(params){
       post {
         always {
           echo "构建结束"
+          
         }
 
         success {
