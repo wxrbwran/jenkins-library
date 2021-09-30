@@ -55,7 +55,7 @@ def DingItMarkdown(params, env) {
         text: [
             "# ${params.projectName}构建成功",
             "---",
-            "> 详情"
+            "> 详情",
             "- 分支: ${env.BRANCH_NAME}",
             "- 持续时间: ${currentBuild.durationString}",
             "- 任务: #${env.BUILD_ID}",
