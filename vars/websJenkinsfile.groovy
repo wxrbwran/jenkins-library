@@ -118,7 +118,7 @@ def call(params){
             tool.TagIt(projectId, env.BRANCH_NAME);
           }
           dingtalk (
-            robot: 20210930,
+            robot: "20210930",
             type:'MARKDOWN',
             atAll: false,
             title: "xzl-webs/${BRANCH_NAME}构建成功。",
