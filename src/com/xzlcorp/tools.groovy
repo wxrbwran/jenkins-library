@@ -37,7 +37,7 @@ def ShowTriggerUser(env) {
     }
 }
 
-def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmm")}") {
+def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmmSSSSSS")}") {
     if (branchName == "master") {
         PrintMsg("打tag start","blue")
         gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
