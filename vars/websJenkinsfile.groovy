@@ -117,14 +117,24 @@ def call(params){
         success {
           script {
             tool.TagIt(projectId, env.BRANCH_NAME);
-            dingtalk (
-              robot: 'b2229249-b5ad-4d51-8788-f77706aba44c',
-              type:'MARKDOWN',
+            tool.DingItMarkdown([
+              robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
               atAll: false,
-              title: "xzl-webs/${BRANCH_NAME}构建成功。",
-              messageUrl: "https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${BRANCH_NAME}/${BUILD_ID}/console",
-              text: ["- 成功构建:xzl-webs项目!\n- 分支:${BRANCH_NAME}\n- 持续时间:${currentBuild.durationString}\n- 任务:#${BUILD_ID}\n - 构建地址：[点击查看](https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${BRANCH_NAME}/${BUILD_ID}/console)"],
-            )
+              projectName: "xzl-webs"
+            ],env)
+            // dingtalk (
+            //   robot: 'b2229249-b5ad-4d51-8788-f77706aba44c',
+            //   type:'MARKDOWN',
+            //   atAll: false,
+            //   text: [
+            //     "# xzl-webs构建成功"
+            //     "---",
+            //     "- 分支: ${BRANCH_NAME}",
+            //     "- 持续时间: ${currentBuild.durationString}",
+            //     "- 任务: #${BUILD_ID}",
+            //     "- 构建地址: [点击查看](https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${BRANCH_NAME}/${BUILD_ID}/console)"
+            //   ],
+            // )
           }
         }
 

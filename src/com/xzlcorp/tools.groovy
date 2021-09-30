@@ -46,3 +46,20 @@ def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmm
         PrintMsg("不是master,不打了","blue")
     }
 }
+
+def DingItMarkdown(params, env) {
+    dingtalk (
+        robot: params.robotId,
+        type:'MARKDOWN',
+        atAll: params.atAll,
+        text: [
+            "# ${params.projectName}构建成功"
+            "---",
+            "> 详情"
+            "- 分支: ${env.BRANCH_NAME}",
+            "- 持续时间: ${currentBuild.durationString}",
+            "- 任务: #${env.BUILD_ID}",
+            "- 构建地址: [点击查看](https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${env.BRANCH_NAME}/${env.BUILD_ID}/console)"
+        ],
+    )
+}
