@@ -124,7 +124,7 @@ def call(params){
               title: "xzl-webs/${BRANCH_NAME}构建成功。",
               messageUrl: "https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${BRANCH_NAME}/${BUILD_ID}/console",
               text: ["- 成功构建:xzl-webs项目!\n- 分支:${BRANCH_NAME}\n- 持续时间:${currentBuild.durationString}\n- 任务:#${BUILD_ID}"],
-            )
+            )
           }
         }
 
