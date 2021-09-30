@@ -114,16 +114,17 @@ def call(params){
         }
 
         success {
-          // echo "构建成功"
           script {
             tool.TagIt(projectId, env.BRANCH_NAME);
-          //   if (env.BRANCH == "master") {
-          //     tool.PrintMsg("打tag start","blue")
-          //     String tagString = "v${new Date().format("yy.MMdd.HHmm")}"
-          //     gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
-          //     tool.PrintMsg("打tag end","blue")
-          //   }
           }
+          dingtalk (
+            robot: '2ef24721-68a1-4b41-b312-1d8bfad05a70',
+            type:'MARKDOWN',
+            atAll: false,
+            title: "xzl-webs/${BRANCH_NAME}构建成功。",
+            messageUrl: "https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${BRANCH_NAME}/${BUILD_ID}/console",
+            text: ["- 成功构建:xzl-webs项目!\n- 分支:${BRANCH_NAME}\n- 持续时间:${currentBuild.durationString}\n- 任务:#${BUILD_ID}"],
+          )
         }
 
         failure {
