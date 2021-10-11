@@ -17,9 +17,18 @@ def call(params){
   def converted = tool.JSON2Obj(packagesList);
 
   converted.each({
-    if (!banned.contains(it.name) && !it.name.startsWith("."))
+    if (!it.name.startsWith("."))
     projects.add(it.name)
   })
+  //  if (shared.contains(it.name)) {
+  //     projects = packagesList - "shared"
+  // } else {
+  //   converted.each({
+  //     if (!it.name.startsWith(".")) {
+  //       projects.add(it.name)
+  //     }
+  //   })
+  // }
 
   pipeline {
       agent {
@@ -96,12 +105,22 @@ def call(params){
           stage("build") {
             steps {
               script {
-                projects.each({
-                  if (env.GIT_CHANGE.contains(it)) {
-                    println("项目${it}已更改。")
+                if (projects.contains("shared")) {
+                  projects = projects - "shared"
+                  println("shared已更改,进行全部构建！")
+                  projects.each({
                     webs.BuildAndDeployWebProject(it)
-                  }
-                })
+                  })
+
+                  
+                } else {
+                  projects.each({
+                    if (env.GIT_CHANGE.contains(it)) {
+                      println("项目${it}已更改。")
+                      webs.BuildAndDeployWebProject(it)
+                    }
+                  })
+                }
               }
             }
           }
