@@ -63,3 +63,7 @@ def DingItMarkdown(params, env) {
         ],
     )
 }
+
+def GetProjectId(projectName) {
+    
+}

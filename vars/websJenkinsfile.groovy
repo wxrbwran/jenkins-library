@@ -107,17 +107,17 @@ def call(params){
               script {
                 if (env.GIT_CHANGE.contains("shared")) {
                   projects = projects - "shared"
-                  println("shared已更改,进行全部构建！")
+                  println("shared已更改,进行全部构建!")
                   projects.each({
                     webs.BuildAndDeployWebProject(it)
                   })
                 } else {
                   projects.each({
                     if (env.GIT_CHANGE.contains(it)) {
-                      println("项目${it}已更改。")
+                      println("项目${it}已更改,进行构建。")
                       webs.BuildAndDeployWebProject(it)
                     } else {
-                      println("项目业务内容未更改，不再构建。")
+                      println("项目${${it}}业务内容未更改,不再构建。")
                     }
                   })
                 }
