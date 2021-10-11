@@ -51,7 +51,7 @@ def call(params){
               printPostContent: true,
               // regexpFilterExpression与regexpFilterExpression成对使用
               // 当两者相等时，会触发对应分支的构建
-              regexpFilterExpression: '^refs/heads/(cro|doctor|nurse|out|org)-(dev|test|master)$',
+              regexpFilterExpression: '^refs/heads/(dev|test|master)$',
               regexpFilterText: '$ref',
               // 与webhook中配置的token参数值一致
               token: 'xzl-webs-token'
@@ -83,8 +83,8 @@ def call(params){
               script {
                 projects.each({
                   if (env.GIT_CHANGE.contains(it) && !PNPM_INSTALLED) {
-                    // sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
-                    // sh "pnpm install --registry=https://registry.npm.taobao.org"
+                    sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
+                    sh "pnpm install --registry=https://registry.npm.taobao.org"
                     PNPM_INSTALLED = true
                   }
                 })
@@ -99,7 +99,7 @@ def call(params){
                 projects.each({
                   if (env.GIT_CHANGE.contains(it)) {
                     println("项目${it}已更改。")
-                    // webs.BuildAndDeployWebProject(it)
+                    webs.BuildAndDeployWebProject(it)
                   }
                 })
               }
@@ -122,19 +122,6 @@ def call(params){
               atAll: false,
               projectName: "xzl-webs"
             ],env)
-            // dingtalk (
-            //   robot: 'b2229249-b5ad-4d51-8788-f77706aba44c',
-            //   type:'MARKDOWN',
-            //   atAll: false,
-            //   text: [
-            //     "# xzl-webs构建成功"
-            //     "---",
-            //     "- 分支: ${BRANCH_NAME}",
-            //     "- 持续时间: ${currentBuild.durationString}",
-            //     "- 任务: #${BUILD_ID}",
-            //     "- 构建地址: [点击查看](https://njenkins.xzlcorp.com/view/Web/job/xzl-webs/job/${BRANCH_NAME}/${BUILD_ID}/console)"
-            //   ],
-            // )
           }
         }
 
