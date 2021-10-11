@@ -118,6 +118,8 @@ def call(params){
                     if (env.GIT_CHANGE.contains(it)) {
                       println("项目${it}已更改。")
                       webs.BuildAndDeployWebProject(it)
+                    } else {
+                      println("项目业务内容未更改，不再构建。")
                     }
                   })
                 }
