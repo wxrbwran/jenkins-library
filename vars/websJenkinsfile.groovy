@@ -114,10 +114,10 @@ def call(params){
                 } else {
                   projects.each({
                     if (env.GIT_CHANGE.contains(it)) {
-                      println("项目${it}已更改,进行构建。")
+                      println("项目 === ${it} ===已更改,进行构建。")
                       webs.BuildAndDeployWebProject(it)
                     } else {
-                      println("项目${${it}}业务内容未更改,不再构建。")
+                      println("项目 === ${it} === 业务内容未更改,不再构建。")
                     }
                   })
                 }
