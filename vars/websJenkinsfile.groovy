@@ -127,11 +127,6 @@ def call(params){
       }
 
       post {
-        always {
-          echo "构建结束"
-          
-        }
-
         success {
           script {
             tool.TagIt(projectId, env.BRANCH_NAME);
@@ -148,7 +143,7 @@ def call(params){
           script {
             tool.DingItMarkdown([
               robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
-              atAll: false,
+              atAll: true,
               projectName: "xzl-webs"
               type: "failure"
             ],env)
@@ -157,6 +152,11 @@ def call(params){
 
         aborted {
           echo "构建中断"
+        }
+
+        always {
+          echo "构建结束"
+          
         }
       }
   }
