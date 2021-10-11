@@ -48,12 +48,13 @@ def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmm
 }
 
 def DingItMarkdown(params, env) {
+    text = params.type == "success" ? "成功" : "失败";
     dingtalk (
         robot: params.robotId,
         type:'MARKDOWN',
         atAll: params.atAll,
         text: [
-            "# ${params.projectName}构建成功",
+            "# ${params.projectName}构建${text}",
             "---",
             "> 详情",
             "- 分支: ${env.BRANCH_NAME}",

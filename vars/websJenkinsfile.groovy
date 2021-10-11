@@ -139,12 +139,20 @@ def call(params){
               robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
               atAll: false,
               projectName: "xzl-webs"
+              type: "success"
             ],env)
           }
         }
 
         failure {
-          echo "构建失败"
+          script {
+            tool.DingItMarkdown([
+              robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
+              atAll: false,
+              projectName: "xzl-webs"
+              type: "failure"
+            ],env)
+          }
         }
 
         aborted {
