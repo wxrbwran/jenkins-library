@@ -105,14 +105,12 @@ def call(params){
           stage("build") {
             steps {
               script {
-                if (projects.contains("shared")) {
+                if (env.GIT_CHANGE.contains("shared")) {
                   projects = projects - "shared"
                   println("shared已更改,进行全部构建！")
                   projects.each({
                     webs.BuildAndDeployWebProject(it)
                   })
-
-                  
                 } else {
                   projects.each({
                     if (env.GIT_CHANGE.contains(it)) {
