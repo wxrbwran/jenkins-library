@@ -9,7 +9,6 @@ def call(params){
   tool.ShowTriggerUser(env)
 
   def projects = []
-  def banned = ["shared"]
   def PNPM_INSTALLED = false
 
   def projectId = gitlab.GetProjectID("xzl-webs")

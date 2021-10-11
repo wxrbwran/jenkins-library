@@ -65,5 +65,6 @@ def DingItMarkdown(params, env) {
 }
 
 def GetProjectId(projectName) {
-    
+    def projectIdMap = ["xzl-webs": 334];
+    return projectIdMap[projectName];
 }
