@@ -19,15 +19,7 @@ def call(params){
     if (!it.name.startsWith("."))
     projects.add(it.name)
   })
-  //  if (shared.contains(it.name)) {
-  //     projects = packagesList - "shared"
-  // } else {
-  //   converted.each({
-  //     if (!it.name.startsWith(".")) {
-  //       projects.add(it.name)
-  //     }
-  //   })
-  // }
+
 
   pipeline {
       agent {
@@ -133,7 +125,7 @@ def call(params){
             tool.DingItMarkdown([
               robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
               atAll: false,
-              projectName: "xzl-webs"
+              projectName: "xzl-webs",
               type: "success"
             ],env)
           }
@@ -144,7 +136,7 @@ def call(params){
             tool.DingItMarkdown([
               robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
               atAll: true,
-              projectName: "xzl-webs"
+              projectName: "xzl-webs",
               type: "failure"
             ],env)
           }
@@ -156,7 +148,6 @@ def call(params){
 
         always {
           echo "构建结束"
-          
         }
       }
   }
