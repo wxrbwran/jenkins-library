@@ -121,7 +121,7 @@ def call(params){
       post {
         success {
           script {
-            tool.TagIt(projectId, env.BRANCH_NAME);
+            // tool.TagIt(projectId, env.BRANCH_NAME);
             tool.DingItMarkdown([
               robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
               atAll: false,

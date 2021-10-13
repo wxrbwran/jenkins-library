@@ -173,3 +173,13 @@ def GetProjectFileTree(projectId, branchName, path){
     response = HttpReq('GET',url)
     return response.content
 }
+
+def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmmSSSSSS")}") {
+    if (branchName == "master") {
+        PrintMsg("打tag start","blue")
+        gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+        PrintMsg("打tag end","blue")
+    } else {
+        PrintMsg("不是master,不打了","blue")
+    }
+}
