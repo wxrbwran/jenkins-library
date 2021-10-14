@@ -46,7 +46,7 @@ def call(param) {
                             env.DOCKER_JRE_IMAGE = "${DOCKER_REGISTRY_PREFIX}/corp/jre:11u8"
 
                             AGENT_LABEL = "SX_DEV"
-                        } else if (env.BRANCH_NAME == 'config') {
+                        } else if (env.BRANCH_NAME == 'config-dev') {
                             env.TARGET_HOST_IP = "172.16.10.129"
                             env.EUREKA_URL = "http://172.16.10.129:7990/eureka/"
 
