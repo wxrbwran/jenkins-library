@@ -186,7 +186,6 @@ pipeline {
                             sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-pre-deploy.sh || true"'
                         } catch (exc) {
                             sh 'echo "首次运行在该机器，所以清理失败!"'
-                            //throw
                         } finally {
                             writeFile file: "${CURRENT_PRJ_NAME}-deploy.sh", text: '#!/bin/bash \n' +
                                     'echo " -> （2） 部署 Docker 镜像到目标服务器"\n' +
@@ -206,7 +205,6 @@ pipeline {
                             sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-deploy.sh root@${TARGET_HOST_IP}:"~"'
                             sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-deploy.sh'
                             sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-deploy.sh || true"'
-//                        sh 'ssh -o StrictHostKeyChecking=no -l root 172.16.10.129 uname -a'
                         }
                     }
                 }
@@ -218,9 +216,7 @@ pipeline {
                 label AGENT_LABEL as String
             }
             steps {
-//                TODO: clear docker image of local host
                 sh 'echo "清理构建输出的制品"'
-//                sh 'docker image rmi --force ${DOCKER_REGISTRY_IMAGE_TARGET} || true'
                 cleanWs()
             }
         }
