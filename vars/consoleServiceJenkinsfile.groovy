@@ -1,4 +1,4 @@
-def call() {
+def call(param) {
     AGENT_LABEL = "MASTER"
     pipeline {
         agent {
