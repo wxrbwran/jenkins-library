@@ -46,7 +46,7 @@ def call(param) {
                             env.DOCKER_JRE_IMAGE = "${DOCKER_REGISTRY_PREFIX}/corp/jre:11u8"
 
                             AGENT_LABEL = "SX_DEV"
-                        } else if (env.BRANCH_NAME == 'dev') {
+                        } else if (env.BRANCH_NAME == 'config') {
                             env.TARGET_HOST_IP = "172.16.10.129"
                             env.EUREKA_URL = "http://172.16.10.129:7990/eureka/"
 
@@ -91,7 +91,6 @@ def call(param) {
                             AGENT_LABEL = "MSA"
                             env.RUN_PARAMS = "--spring.cloud.config.profile=aliyun_prod --spring.profiles.active=aliyun_prod"
                         } else {
-
                             sh 'echo "当前分支暂未支持流水线作业!!!" && exit 1'
                         }
                     }
@@ -127,43 +126,43 @@ def call(param) {
                 steps {
                     script {
                         if (env.BRANCH_NAME != 'prod_master') {
-                            // sh 'gradle -Dorg.gradle.daemon=false clean'
-                            // sh '''
-                            //     echo " ->（1）构建打包 (Fat Jar)"
-                            //     TASK=":publish"
-                            //     if gradle tasks --all | grep "$TASK"
-                            //     then
-                            //         echo 'publish library artifact'
-                            //         gradle -Dorg.gradle.daemon=false publish
-                            //     else
-                            //         echo 'no publish task'
-                            //     fi
+                            sh 'gradle -Dorg.gradle.daemon=false clean'
+                            sh '''
+                                echo " ->（1）构建打包 (Fat Jar)"
+                                TASK=":publish"
+                                if gradle tasks --all | grep "$TASK"
+                                then
+                                    echo 'publish library artifact'
+                                    gradle -Dorg.gradle.daemon=false publish
+                                else
+                                    echo 'no publish task'
+                                fi
                                 
-                            //     if gradle tasks --all | grep "upgradeVersion"
-                            //     then
-                            //         echo 'upgradeVersion artifact to db'
-                            //         gradle -Dorg.gradle.daemon=false upgradeVersion
-                            //     else
-                            //         gradle -Dorg.gradle.daemon=false build -x compileTestJava
-                            //     fi
-                            // '''
+                                if gradle tasks --all | grep "upgradeVersion"
+                                then
+                                    echo 'upgradeVersion artifact to db'
+                                    gradle -Dorg.gradle.daemon=false upgradeVersion
+                                else
+                                    gradle -Dorg.gradle.daemon=false build -x compileTestJava
+                                fi
+                            '''
 
-                            // sh '''
-                            //     echo " ->（2）构建Docker 镜像"
-                            //     docker build \
-                            //     --build-arg jre=${DOCKER_JRE_IMAGE} \
-                            //     -t ${DOCKER_REGISTRY_IMAGE_TARGET} \
-                            //     --pull=true \
-                            //     ${WORKSPACE}
-                            // '''
-                            // sh '''
-                            //     echo " -> （3） Docker 镜像上传入库"
-                            //     docker login \
-                            //     --username ${ALIYUN_DOCKER_REGISTRY_LOGIN_USR} \
-                            //     --password ${ALIYUN_DOCKER_REGISTRY_LOGIN_PSW} \
-                            //     ${DOCKER_REGISTRY_URL}
-                            //     docker push ${DOCKER_REGISTRY_IMAGE_TARGET}
-                            // '''
+                            sh '''
+                                echo " ->（2）构建Docker 镜像"
+                                docker build \
+                                --build-arg jre=${DOCKER_JRE_IMAGE} \
+                                -t ${DOCKER_REGISTRY_IMAGE_TARGET} \
+                                --pull=true \
+                                ${WORKSPACE}
+                            '''
+                            sh '''
+                                echo " -> （3） Docker 镜像上传入库"
+                                docker login \
+                                --username ${ALIYUN_DOCKER_REGISTRY_LOGIN_USR} \
+                                --password ${ALIYUN_DOCKER_REGISTRY_LOGIN_PSW} \
+                                ${DOCKER_REGISTRY_URL}
+                                docker push ${DOCKER_REGISTRY_IMAGE_TARGET}
+                            '''
                         }
                     }
                 }
@@ -177,35 +176,35 @@ def call(param) {
                     script {
                         sshagent(credentials: ['jenkins-self-ssh-key']) {
                             try {
-                                // writeFile file: "${CURRENT_PRJ_NAME}-pre-deploy.sh", text: '#!/bin/bash \n ' +
-                                //         'echo " -> （1）尝试清理原有运行资源" \n ' +
-                                //         'docker stop ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
-                                //         'docker container rm -f ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
-                                //         'docker image rmi --force ' + "${DOCKER_REGISTRY_IMAGE_TARGET}" + ' || true \n'
-                                // sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-pre-deploy.sh root@${TARGET_HOST_IP}:"~"'
-                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-pre-deploy.sh'
-                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-pre-deploy.sh || true"'
+                                writeFile file: "${CURRENT_PRJ_NAME}-pre-deploy.sh", text: '#!/bin/bash \n ' +
+                                        'echo " -> （1）尝试清理原有运行资源" \n ' +
+                                        'docker stop ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
+                                        'docker container rm -f ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
+                                        'docker image rmi --force ' + "${DOCKER_REGISTRY_IMAGE_TARGET}" + ' || true \n'
+                                sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-pre-deploy.sh root@${TARGET_HOST_IP}:"~"'
+                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-pre-deploy.sh'
+                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-pre-deploy.sh || true"'
                             } catch (exc) {
-                                // sh 'echo "首次运行在该机器，所以清理失败!"'
+                                sh 'echo "首次运行在该机器，所以清理失败!"'
                             } finally {
-                                // writeFile file: "${CURRENT_PRJ_NAME}-deploy.sh", text: '#!/bin/bash \n' +
-                                //         'echo " -> （2） 部署 Docker 镜像到目标服务器"\n' +
-                                //         'docker login \\\n' +
-                                //         '--username ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_USR}"  + ' \\\n' +
-                                //         '--password ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_PSW}" + ' \\\n' +
-                                //         "${DOCKER_REGISTRY_URL}\n" +
+                                writeFile file: "${CURRENT_PRJ_NAME}-deploy.sh", text: '#!/bin/bash \n' +
+                                        'echo " -> （2） 部署 Docker 镜像到目标服务器"\n' +
+                                        'docker login \\\n' +
+                                        '--username ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_USR}"  + ' \\\n' +
+                                        '--password ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_PSW}" + ' \\\n' +
+                                        "${DOCKER_REGISTRY_URL}\n" +
 
-                                //         'docker run --log-opt max-size=10m --log-opt max-file=5 \\\n' +
-                                //         '-d --restart=always  \\\n' +
-                                //         '-e HOST_IP=$(echo $(hostname -I) | cut -d " " -f1) \\\n' +
-                                //         '-e EUREKA_URL=' + "${EUREKA_URL}" + ' \\\n' +
-                                //         '-e ZONE=' + "${BRANCH_NAME}" + ' \\\n' +
-                                //         '-p ' + "${RUN_PORT}" + ':' + "${RUN_PORT}" + ' \\\n' +
-                                //         '--name ' + "${CURRENT_PRJ_NAME}" + ' \\\n' +
-                                //         "${DOCKER_REGISTRY_IMAGE_TARGET}" + " ${RUN_PARAMS}"
-                                // sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-deploy.sh root@${TARGET_HOST_IP}:"~"'
-                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-deploy.sh'
-                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-deploy.sh || true"'
+                                        'docker run --log-opt max-size=10m --log-opt max-file=5 \\\n' +
+                                        '-d --restart=always  \\\n' +
+                                        '-e HOST_IP=$(echo $(hostname -I) | cut -d " " -f1) \\\n' +
+                                        '-e EUREKA_URL=' + "${EUREKA_URL}" + ' \\\n' +
+                                        '-e ZONE=' + "${BRANCH_NAME}" + ' \\\n' +
+                                        '-p ' + "${RUN_PORT}" + ':' + "${RUN_PORT}" + ' \\\n' +
+                                        '--name ' + "${CURRENT_PRJ_NAME}" + ' \\\n' +
+                                        "${DOCKER_REGISTRY_IMAGE_TARGET}" + " ${RUN_PARAMS}"
+                                sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-deploy.sh root@${TARGET_HOST_IP}:"~"'
+                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-deploy.sh'
+                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-deploy.sh || true"'
                             }
                         }
                     }
