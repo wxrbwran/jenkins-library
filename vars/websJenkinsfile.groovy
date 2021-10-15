@@ -124,11 +124,11 @@ def call(params){
             // tool.TagIt(projectId, env.BRANCH_NAME);
             try {
               if (env.BRANCH_NAME == "master") {
-                PrintMsg("打tag start","blue")
+                tool.PrintMsg("打tag start","blue")
                 gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
-                PrintMsg("打tag end","blue")
+                tool.PrintMsg("打tag end","blue")
               } else {
-                PrintMsg("不是master,不打了","blue")
+                tool.PrintMsg("不是master,不打了","blue")
               }
               tool.DingItMarkdown([
                 robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
@@ -137,7 +137,7 @@ def call(params){
                 type: "success"
               ],env)
             } catch (e) {
-              PrintMsg(e,"red")
+              tool.PrintMsg(e,"red")
             }
           }
         }
