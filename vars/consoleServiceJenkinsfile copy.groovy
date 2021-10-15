@@ -91,7 +91,6 @@ pipeline {
                         AGENT_LABEL = "MSA"
                         env.RUN_PARAMS = "--spring.cloud.config.profile=aliyun_prod --spring.profiles.active=aliyun_prod"
                     } else {
-
                         sh 'echo "当前分支暂未支持流水线作业!!!" && exit 1'
                     }
                 }

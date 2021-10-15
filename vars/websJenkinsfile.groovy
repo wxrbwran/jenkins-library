@@ -122,23 +122,38 @@ def call(params){
         success {
           script {
             // tool.TagIt(projectId, env.BRANCH_NAME);
-            tool.DingItMarkdown([
-              robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
-              atAll: false,
-              projectName: "xzl-webs",
-              type: "success"
-            ],env)
+            try {
+              if (env.BRANCH_NAME == "master") {
+                PrintMsg("打tag start","blue")
+                gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+                PrintMsg("打tag end","blue")
+              } else {
+                PrintMsg("不是master,不打了","blue")
+              }
+              tool.DingItMarkdown([
+                robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
+                atAll: false,
+                projectName: "xzl-webs",
+                type: "success"
+              ],env)
+            } catch (e) {
+              PrintMsg(e,"red")
+            }
           }
         }
 
         failure {
           script {
-            tool.DingItMarkdown([
-              robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
-              atAll: true,
-              projectName: "xzl-webs",
-              type: "failure"
-            ],env)
+            try {
+              tool.DingItMarkdown([
+                robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
+                atAll: true,
+                projectName: "xzl-webs",
+                type: "failure"
+              ],env)
+            } catch (e) {
+              PrintMsg(e,"red")
+            }
           }
         }
 

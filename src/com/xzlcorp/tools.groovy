@@ -69,3 +69,18 @@ def GetProjectId(projectName) {
     def projectIdMap = ["xzl-webs": 334];
     return projectIdMap[projectName];
 }
+
+def GetBackendEnv(projectName) {
+    switch(projectName) {
+        case "med-service":
+            return [
+                RUN_PORT: 8030,
+                TARGET_HOST_IP: "10.0.2.130"
+            ];
+        case "console-service":
+            return [
+                RUN_PORT: 8020,
+                TARGET_HOST_IP: "10.0.2.131"
+            ];
+    }
+}

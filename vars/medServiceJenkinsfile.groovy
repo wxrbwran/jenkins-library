@@ -176,35 +176,35 @@ def call(param) {
                     script {
                         sshagent(credentials: ['jenkins-self-ssh-key']) {
                             try {
-                                writeFile file: "${CURRENT_PRJ_NAME}-pre-deploy.sh", text: '#!/bin/bash \n ' +
-                                        'echo " -> （1）尝试清理原有运行资源" \n ' +
-                                        'docker stop ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
-                                        'docker container rm -f ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
-                                        'docker image rmi --force ' + "${DOCKER_REGISTRY_IMAGE_TARGET}" + ' || true \n'
-                                sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-pre-deploy.sh root@${TARGET_HOST_IP}:"~"'
-                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-pre-deploy.sh'
-                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-pre-deploy.sh || true"'
+                                // writeFile file: "${CURRENT_PRJ_NAME}-pre-deploy.sh", text: '#!/bin/bash \n ' +
+                                //         'echo " -> （1）尝试清理原有运行资源" \n ' +
+                                //         'docker stop ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
+                                //         'docker container rm -f ' + "${CURRENT_PRJ_NAME}" + ' || true \n' +
+                                //         'docker image rmi --force ' + "${DOCKER_REGISTRY_IMAGE_TARGET}" + ' || true \n'
+                                // sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-pre-deploy.sh root@${TARGET_HOST_IP}:"~"'
+                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-pre-deploy.sh'
+                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-pre-deploy.sh || true"'
                             } catch (exc) {
-                                sh 'echo "首次运行在该机器，所以清理失败!"'
+                                // sh 'echo "首次运行在该机器，所以清理失败!"'
                             } finally {
-                                writeFile file: "${CURRENT_PRJ_NAME}-deploy.sh", text: '#!/bin/bash \n' +
-                                        'echo " -> （2） 部署 Docker 镜像到目标服务器"\n' +
-                                        'docker login \\\n' +
-                                        '--username ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_USR}"  + ' \\\n' +
-                                        '--password ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_PSW}" + ' \\\n' +
-                                        "${DOCKER_REGISTRY_URL}\n" +
+                                // writeFile file: "${CURRENT_PRJ_NAME}-deploy.sh", text: '#!/bin/bash \n' +
+                                //         'echo " -> （2） 部署 Docker 镜像到目标服务器"\n' +
+                                //         'docker login \\\n' +
+                                //         '--username ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_USR}"  + ' \\\n' +
+                                //         '--password ' + "${ALIYUN_DOCKER_REGISTRY_LOGIN_PSW}" + ' \\\n' +
+                                //         "${DOCKER_REGISTRY_URL}\n" +
 
-                                        'docker run --log-opt max-size=10m --log-opt max-file=5 \\\n' +
-                                        '-d --restart=always  \\\n' +
-                                        '-e HOST_IP=$(echo $(hostname -I) | cut -d " " -f1) \\\n' +
-                                        '-e EUREKA_URL=' + "${EUREKA_URL}" + ' \\\n' +
-                                        '-e ZONE=' + "${BRANCH_NAME}" + ' \\\n' +
-                                        '-p ' + "${RUN_PORT}" + ':' + "${RUN_PORT}" + ' \\\n' +
-                                        '--name ' + "${CURRENT_PRJ_NAME}" + ' \\\n' +
-                                        "${DOCKER_REGISTRY_IMAGE_TARGET}" + " ${RUN_PARAMS}"
-                                sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-deploy.sh root@${TARGET_HOST_IP}:"~"'
-                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-deploy.sh'
-                                sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-deploy.sh || true"'
+                                //         'docker run --log-opt max-size=10m --log-opt max-file=5 \\\n' +
+                                //         '-d --restart=always  \\\n' +
+                                //         '-e HOST_IP=$(echo $(hostname -I) | cut -d " " -f1) \\\n' +
+                                //         '-e EUREKA_URL=' + "${EUREKA_URL}" + ' \\\n' +
+                                //         '-e ZONE=' + "${BRANCH_NAME}" + ' \\\n' +
+                                //         '-p ' + "${RUN_PORT}" + ':' + "${RUN_PORT}" + ' \\\n' +
+                                //         '--name ' + "${CURRENT_PRJ_NAME}" + ' \\\n' +
+                                //         "${DOCKER_REGISTRY_IMAGE_TARGET}" + " ${RUN_PARAMS}"
+                                // sh 'scp -o StrictHostKeyChecking=no ${CURRENT_PRJ_NAME}-deploy.sh root@${TARGET_HOST_IP}:"~"'
+                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} bash ~/${CURRENT_PRJ_NAME}-deploy.sh'
+                                // sh 'ssh -o StrictHostKeyChecking=no -l root ${TARGET_HOST_IP} "rm -f ~/${CURRENT_PRJ_NAME}-deploy.sh || true"'
                             }
                         }
                     }
@@ -221,8 +221,6 @@ def call(param) {
                 }
             }
         }
-
-
         post {
             success {
                 sh "echo suc!"
