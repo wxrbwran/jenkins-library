@@ -16,6 +16,20 @@ def HttpReq(reqType,reqUrl,reqBody = ""){
     return result
 }
 
+def OriHttpReq(reqType,reqUrl,reqBody = ""){
+    withCredentials([string(credentialsId: 'gitlab-token', variable: 'gitlabToken')]) {
+      result = httpRequest customHeaders: [[maskValue: true, name: 'PRIVATE-TOKEN', value: "${gitlabToken}"]], 
+                httpMode: reqType, 
+                contentType: "APPLICATION_JSON",
+                consoleLogResponseBody: true,
+                ignoreSslErrors: true, 
+                requestBody: reqBody,
+                url: reqUrl
+                //quiet: true
+    }
+    return result
+}
+
 //获取项目ID
 def GetProjectID(projectName){
     projectApi = "projects?search=${projectName}"
