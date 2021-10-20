@@ -32,8 +32,8 @@ def OriHttpReq(reqType,reqUrl,reqBody = ""){
 
 def GetOriFile(reqUrl){
     response = OriHttpReq('GET',reqUrl)
-    println("response", response);
-    println("response.response", response.response);
+    println(response);
+    println(response.response);
     return response
 }
 
