@@ -84,3 +84,37 @@ def GetBackendEnv(projectName) {
             ];
     }
 }
+
+def HandleEnv(env) {
+    env.RUN_PARAMS = "--spring.cloud.config.profile=${BRANCH_NAME} --spring.profiles.active=${BRANCH_NAME}"
+    if (env.BRANCH_NAME == 'shanxi_dev') {
+        env.TARGET_HOST_IP = "192.168.1.100"
+        env.EUREKA_URL = "http://192.168.1.100:7990/eureka/"
+        AGENT_LABEL = "SX_DEV"
+    } else if (env.BRANCH_NAME == 'dev') {
+        env.TARGET_HOST_IP = "172.16.10.129"
+        env.EUREKA_URL = "http://172.16.10.129:7990/eureka/"
+        AGENT_LABEL = "YX_DEV"
+    } else if (env.BRANCH_NAME == 'test') {
+        env.TARGET_HOST_IP = "172.16.10.128"
+        env.EUREKA_URL = "http://172.16.10.128:7990/eureka/"
+        AGENT_LABEL = "YX_DEV"
+    } else if (env.BRANCH_NAME == 'master') {
+        env.TARGET_HOST_IP = "172.16.10.122"
+        env.EUREKA_URL = "http://172.16.10.122:7990/eureka/"
+        AGENT_LABEL = "YX_DEV"
+        env.RUN_PARAMS = "--spring.cloud.config.profile=prod --spring.profiles.active=prod"
+    } else if (env.BRANCH_NAME == 'prod_master') {
+        env.TARGET_HOST_IP = "10.0.2.130"
+        env.EUREKA_URL = "http://10.0.2.129:7990/eureka/"
+        AGENT_LABEL = "MSA"
+        env.RUN_PARAMS = "--spring.cloud.config.profile=aliyun_prod --spring.profiles.active=aliyun_prod"
+    }
+    env.DOCKER_REGISTRY_HOST = "registry.cn-beijing.aliyuncs.com"
+    env.DOCKER_REGISTRY_URL = "https://${DOCKER_REGISTRY_HOST}"
+    env.DOCKER_REGISTRY_PREFIX = "${DOCKER_REGISTRY_HOST}"
+    env.DOCKER_REGISTRY_IMAGE_TARGET = "${DOCKER_REGISTRY_PREFIX}/xzl-dev/${CURRENT_PRJ_NAME}"
+    env.DOCKER_JRE_IMAGE = "${DOCKER_REGISTRY_PREFIX}/corp/jre:11u8"
+
+    return env;
+}
