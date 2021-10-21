@@ -91,7 +91,7 @@ def HandleEnv(env) {
         env.TARGET_HOST_IP = "192.168.1.100"
         env.EUREKA_URL = "http://192.168.1.100:7990/eureka/"
         AGENT_LABEL = "SX_DEV"
-    } else if (env.BRANCH_NAME == 'dev') {
+    } else if (env.BRANCH_NAME == 'dev1') {
         env.TARGET_HOST_IP = "172.16.10.129"
         env.EUREKA_URL = "http://172.16.10.129:7990/eureka/"
         AGENT_LABEL = "YX_DEV"
