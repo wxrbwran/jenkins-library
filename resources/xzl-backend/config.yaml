@@ -16,6 +16,15 @@ remote_groups:
 
 command_groups:
   prebuild:
+  #   - gets:
+  #     - from: 'test.sh'
+  #       into: 'test_new.sh'
+  #       override: true
+  #   - puts:
+  #       - from: 'test.sh'
+  #         into: '.'
+  #   - removes:
+  #       - 'test.sh'
     - commands:
         - 'ls -lrt'
         - 'whoami'
@@ -32,9 +41,17 @@ command_groups:
   #   - removes:
   #       - 'test.sh'
   predeploy:
-    - commands:
-        - "pwd"
-        - "uname -a"
+    # - gets:
+    #   - from: 'pre_build.sh'
+    #     into: 'pre_build.sh'
+    #     override: true
+    - puts:
+        - from: 'pre_build.sh'
+          into: '.'
+    - scripts:
+        - "pre_build.sh DOCKER_JRE_IMAGE=asd DOCKER_REGISTRY_IMAGE_TARGET=192.168 WORKSPACE=/abc/cde DOCKER_REGISTRY_URL=http:// ALIYUN_DOCKER_REGISTRY_LOGIN_PSW=asd"
+    # - removes:
+    #     - 'test.sh'
 
 steps:
   deploy:
