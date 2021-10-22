@@ -15,7 +15,7 @@ remote_groups:
   #     host: node03.abc.net
 
 command_groups:
-  c_group_1:
+  prebuild:
     - commands:
         - 'ls -lrt'
         - 'whoami'
@@ -31,7 +31,7 @@ command_groups:
   #         into: '.'
   #   - removes:
   #       - 'test.sh'
-  c_group_2:
+  predeploy:
     - commands:
         - "pwd"
         - "uname -a"
@@ -41,8 +41,8 @@ steps:
     - remote_groups:
         - r_group_1
       command_groups:
-        - c_group_1
-        - c_group_2
+        - prebuild
+        - predeploy
     # - remote_groups:
     #     - r_group_2
     #   command_groups:
