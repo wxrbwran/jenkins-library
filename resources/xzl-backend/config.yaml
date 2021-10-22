@@ -5,7 +5,7 @@ config:
   # retry_count: 3
 
 remote_groups:
-  r_group_1:
+  r_group:
     - name: wuxiaoran
       host: 172.16.10.52
   #   - name: node02
@@ -15,7 +15,7 @@ remote_groups:
   #     host: node03.abc.net
 
 command_groups:
-  c_group_1:
+  c_group:
     - commands:
         - 'ls -lrt'
         - 'whoami'
@@ -31,6 +31,10 @@ command_groups:
   #         into: '.'
   #   - removes:
   #       - 'test.sh'
+  c_group:
+    - commands:
+        - 'pwd'
+        - 'uname -a'
 
 steps:
   deploy:
