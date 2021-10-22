@@ -48,8 +48,10 @@ command_groups:
     - puts:
         - from: 'pre_build.sh'
           into: '.'
-    - scripts:
-        - "pre_build.sh DOCKER_JRE_IMAGE=asd DOCKER_REGISTRY_IMAGE_TARGET=192.168 WORKSPACE=/abc/cde DOCKER_REGISTRY_URL=http:// ALIYUN_DOCKER_REGISTRY_LOGIN_PSW=asd"
+    - commands:
+        - "bash pre_build.sh DOCKER_JRE_IMAGE=asd DOCKER_REGISTRY_IMAGE_TARGET=192.168 WORKSPACE=/abc/cde DOCKER_REGISTRY_URL=http:// ALIYUN_DOCKER_REGISTRY_LOGIN_PSW=asd"
+    # - scripts:
+    #     - "pre_build.sh DOCKER_JRE_IMAGE=asd DOCKER_REGISTRY_IMAGE_TARGET=192.168 WORKSPACE=/abc/cde DOCKER_REGISTRY_URL=http:// ALIYUN_DOCKER_REGISTRY_LOGIN_PSW=asd"
     # - removes:
     #     - 'test.sh'
 
