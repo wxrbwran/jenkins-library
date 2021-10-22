@@ -39,9 +39,9 @@ command_groups:
 steps:
   deploy:
     - remote_groups:
-        - r_group_1
+        - r_group
       command_groups:
-        - c_group_1
+        - c_group
     # - remote_groups:
     #     - r_group_2
     #   command_groups:
