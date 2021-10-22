@@ -1,0 +1,61 @@
+@Library('jenkins-library@master') _
+
+def tool = new com.xzlcorp.tools()
+
+pipeline {
+      agent {
+          label 'master'
+      }
+      environment {
+        CURRENT_PRJ_NAME = "build-demo"
+        RUN_PORT = 8000
+      }
+      stages{
+
+        stage('prepare') {
+            steps {
+                script {
+                    env = tool.HandleEnv(env);
+                    println(env.TARGET_HOST_IP);
+                }
+            }
+        }
+
+
+        // stage('checkout') {
+        //     steps {
+        //       git branch: "${BRANCH_NAME}",
+        //       credentialsId: 'ssh-self',
+        //       url: 'git@git.xzlcorp.com:wuxiaoran/build-demo.git'
+        //       sh 'ls -lat'
+        //     }
+        //   }
+
+        stage('deploy') {
+            steps {
+                script {
+                    // sshagent(credentials: ['ssh-self']) {
+                        sh 'ls -lat'
+                        def pre_build = libraryResource 'xzl-backend/pre-build.sh'
+                        writeFile file: './pre_build.sh', text: pre_build
+                        sh """
+                            bash pre_build.sh DOCKER_JRE_IMAGE=${env.DOCKER_JRE_IMAGE}
+                           """
+                        def config = libraryResource 'xzl-backend/config.yaml'
+                        writeFile file: './config.yaml', text: config
+                        def yaml = readYaml file: "config.yaml"
+                        yaml.command_groups.predeploy.add([
+                          commands: ["bash pre_build.sh DOCKER_JRE_IMAGE=${env.DOCKER_JRE_IMAGE}"],
+                          removes: ["pre_build.sh"]
+                        ])
+                        println yaml
+                        sshDeploy(yaml, false);
+                      // }
+                  }
+              }
+          }
+    }
+    
+}
+
+
