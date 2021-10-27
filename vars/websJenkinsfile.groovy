@@ -125,7 +125,7 @@ def call(params){
             try {
               if (env.BRANCH_NAME == "master") {
                 tool.PrintMsg("打tag start","blue")
-                gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+                gitlab.TagIt(projectId, env.BRANCH_NAME)
                 tool.PrintMsg("打tag end","blue")
               } else {
                 tool.PrintMsg("不是master,不打了","blue")
