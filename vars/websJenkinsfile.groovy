@@ -82,7 +82,7 @@ def call(params){
             steps {
               script {
                 projects.each({
-                  if (env.GIT_CHANGE.contains(it) && !PNPM_INSTALLED && it != "shared") {
+                  if (env.GIT_CHANGE.contains(it) && !PNPM_INSTALLED) {
                     sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
                     sh "pnpm install --registry=https://registry.npm.taobao.org"
                     PNPM_INSTALLED = true
