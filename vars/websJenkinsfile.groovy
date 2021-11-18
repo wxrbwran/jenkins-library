@@ -1,5 +1,4 @@
-def call(params){
-
+def call(params) {
   def env = params.env
 
   def gitlab = new com.xzlcorp.gitlab()
@@ -11,15 +10,15 @@ def call(params){
   def projects = []
   def PNPM_INSTALLED = false
 
-  def projectId = gitlab.GetProjectID("xzl-webs")
-  def packagesList = gitlab.GetProjectFileTree(projectId, env.BRANCH_NAME, "packages")
-  def converted = tool.JSON2Obj(packagesList);
+  def projectId = gitlab.GetProjectID('xzl-webs')
+  def packagesList = gitlab.GetProjectFileTree(projectId, env.BRANCH_NAME, 'packages')
+  def converted = tool.JSON2Obj(packagesList)
 
   converted.each({
-    if (!it.name.startsWith("."))
-    projects.add(it.name)
+    if (!it.name.startsWith('.')) {
+      projects.add(it.name)
+    }
   })
-
 
   pipeline {
       agent {
@@ -73,49 +72,47 @@ def call(params){
               url: 'git@git.xzlcorp.com:UnitedFrontEnd/xzl-webs.git'
               sh 'ls -lat'
               script {
-                env.GIT_CHANGE = sh(script: "git diff --name-status HEAD~0 HEAD~1", returnStdout: true).trim()
+                env.GIT_CHANGE = sh(script: 'git diff --name-status HEAD~0 HEAD~1', returnStdout: true).trim()
               }
             }
           }
 
-          stage("install") {
+          stage('install') {
             steps {
               script {
                 projects.each({
                   if (env.GIT_CHANGE.contains(it) && !PNPM_INSTALLED) {
-                    sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
-                    sh "pnpm install --registry=https://registry.npm.taobao.org"
-                    PNPM_INSTALLED = true
+                sh 'npm i -g pnpm --registry=https://registry.npm.taobao.org'
+                sh 'pnpm install --registry=https://registry.npm.taobao.org'
+                PNPM_INSTALLED = true
                   }
                 })
-
               }
             }
           }
 
-          stage("build") {
+          stage('build') {
             steps {
               script {
-                if (env.GIT_CHANGE.contains("shared")) {
-                  projects = projects - "shared"
-                  println("shared已更改,进行全部构建!")
-                  projects.each({
+                if (env.GIT_CHANGE.contains('shared')) {
+              projects = projects - 'shared'
+              println('shared已更改,进行全部构建!')
+              projects.each({
                     webs.BuildAndDeployWebProject(it)
-                  })
+              })
                 } else {
-                  projects.each({
+              projects.each({
                     if (env.GIT_CHANGE.contains(it)) {
-                      println("项目 === ${it} ===已更改,进行构建。")
-                      webs.BuildAndDeployWebProject(it)
+                  println("项目 === ${it} ===已更改,进行构建。")
+                  webs.BuildAndDeployWebProject(it)
                     } else {
-                      println("项目 === ${it} === 业务内容未更改,不再构建。")
+                  println("项目 === ${it} === 业务内容未更改,不再构建。")
                     }
-                  })
+              })
                 }
               }
             }
           }
-
       }
 
       post {
@@ -123,21 +120,21 @@ def call(params){
           script {
             // tool.TagIt(projectId, env.BRANCH_NAME);
             try {
-              if (env.BRANCH_NAME == "master") {
-                tool.PrintMsg("打tag start","blue")
-                gitlab.TagIt(projectId, env.BRANCH_NAME)
-                tool.PrintMsg("打tag end","blue")
+            if (env.BRANCH_NAME == 'master') {
+              tool.PrintMsg('打tag start', 'blue')
+              gitlab.TagIt(projectId, env.BRANCH_NAME)
+              tool.PrintMsg('打tag end', 'blue')
               } else {
-                tool.PrintMsg("不是master,不打了","blue")
-              }
-              tool.DingItMarkdown([
+              tool.PrintMsg('不是master, 不打了', 'blue')
+            }
+            tool.DingItMarkdown([
                 robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
                 atAll: false,
-                projectName: "xzl-webs",
-                type: "success"
+                projectName: 'xzl-webs',
+                type: 'success'
               ],env)
             } catch (e) {
-              tool.PrintMsg(e,"red")
+            tool.PrintMsg(e, 'red')
             }
           }
         }
@@ -145,26 +142,25 @@ def call(params){
         failure {
           script {
             try {
-              tool.DingItMarkdown([
+            tool.DingItMarkdown([
                 robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
                 atAll: true,
-                projectName: "xzl-webs",
-                type: "failure"
+                projectName: 'xzl-webs',
+                type: 'failure'
               ],env)
             } catch (e) {
-              PrintMsg(e,"red")
+            PrintMsg(e, 'red')
             }
           }
         }
 
         aborted {
-          echo "构建中断"
+          echo '构建中断'
         }
 
         always {
-          echo "构建结束"
+          echo '构建结束'
         }
       }
   }
-        
 }
