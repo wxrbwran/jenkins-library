@@ -120,13 +120,13 @@ def call(params) {
           script {
             // tool.TagIt(projectId, env.BRANCH_NAME);
             try {
-            // if (env.BRANCH_NAME == 'master') {
+            if (env.BRANCH_NAME == 'master') {
                 tool.PrintMsg('打tag start', 'blue')
                 gitlab.TagIt(projectId, env.BRANCH_NAME)
                 tool.PrintMsg('打tag end', 'blue')
-              // } else {
-              //   tool.PrintMsg('不是master, 不打了', 'blue')
-              // }
+              } else {
+                tool.PrintMsg('不是master, 不打了', 'blue')
+              }
             tool.DingItMarkdown([
                 robotId: 'b2229249-b5ad-4d51-8788-f77706aba44c',
                 atAll: false,
