@@ -134,7 +134,7 @@ def call(params) {
                 type: 'success'
               ],env)
             } catch (e) {
-            tool.PrintMsg(e, 'red')
+              tool.PrintMsg(e, 'red')
             }
           }
         }

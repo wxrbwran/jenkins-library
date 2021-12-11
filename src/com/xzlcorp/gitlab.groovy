@@ -55,13 +55,6 @@ def GetProjectID(projectName){
     return repoId
 }
 
-//创建tag
-def CreateTag(projectId, tag, branchName){
-    def apiUrl = "projects/${projectId}/repository/tags"
-    reqBody = """{"tag_name": "${tag}","ref":"${branchName}", "message": "${branchName}"}"""
-    response = HttpReq('POST',apiUrl,reqBody)
-    println(response)
-}
 
 /**
 **
@@ -177,11 +170,6 @@ def AcceptMr(projectId,mergeId){
     HttpReq('PUT',apiUrl,'')
 }
 
-/**
-**
-* Repositories API
-*/
-
 // 文件tree列表
 
 def GetProjectFileTree(projectId, branchName, path){
@@ -197,6 +185,13 @@ def GetProjectFileTree(projectId, branchName, path){
     return response.content
 }
 
+//创建tag
+def CreateTag(projectId, tag, branchName){
+    def apiUrl = "projects/${projectId}/repository/tags"
+    reqBody = """{"tag_name": "${tag}","ref":"${branchName}", "message": "${branchName}"}"""
+    response = HttpReq('POST',apiUrl,reqBody)
+    println(response)
+}
 def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmmSSSSSS")}") {
-    gitlab.CreateTag(projectId, tagString, env.BRANCH_NAME)
+    CreateTag(projectId, tagString, env.BRANCH_NAME)
 }
