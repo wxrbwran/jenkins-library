@@ -186,12 +186,12 @@ def GetProjectFileTree(projectId, branchName, path){
 }
 
 //创建tag
-def CreateTag(projectId, tag, branchName){
+def CreateTag(projectId, branchName, tag){
     def apiUrl = "projects/${projectId}/repository/tags"
     reqBody = """{"tag_name": "${tag}","ref":"${branchName}", "message": "${branchName}"}"""
     response = HttpReq('POST',apiUrl,reqBody)
     println(response)
 }
 def TagIt(projectId, branchName, tagString = "v${new Date().format("yy.MMdd.HHmmSSSSSS")}") {
-    CreateTag(projectId, tagString, env.BRANCH_NAME)
+    CreateTag(projectId, env.BRANCH_NAME, tagString,)
 }
