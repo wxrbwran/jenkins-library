@@ -34,7 +34,7 @@ def call(params) {
       }
 
       tools {
-          nodejs 'NODEJS_14'
+          nodejs 'NODEJS_16'
       }
 
       triggers {
