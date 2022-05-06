@@ -28,6 +28,9 @@ def BuildAndDeployWebProject(project) {
   if (project == 'out') {
     env.DIST = 'out-hospital-patient'
   }
+  if (project == 'jiupin') {
+    env.DIST = 'jiupin'
+  }
   env.ROOT_PATH = "/Users/xinzhilici/homebrew/var/www/${SERVER_PATH}/${DIST}"
   env.TARGET_HOST_IP = '172.16.10.126'
 
