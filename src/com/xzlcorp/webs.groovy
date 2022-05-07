@@ -12,13 +12,13 @@ def BuildAndDeployWebProject(project) {
   // env.BRANCH_NAME = "dev"
 
   if (BRANCH_NAME == 'master') {
-    env.BUILD_SH = "npm run dist:${project}"
+    env.BUILD_SH = "pnpm run dist:${project}"
     env.SERVER_PATH = 'n'
   } else if (BRANCH_NAME == 'test') {
-    env.BUILD_SH = "npm run prerelease:${project}"
+    env.BUILD_SH = "pnpm run prerelease:${project}"
     env.SERVER_PATH = 'n.test'
   } else if (BRANCH_NAME == 'dev') {
-    env.BUILD_SH = "npm run dev-dist:${project}"
+    env.BUILD_SH = "pnpm run dev-dist:${project}"
     env.SERVER_PATH = 'n.dev'
   }
   env.DIST = "xzl-web-${project}"
