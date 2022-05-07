@@ -19,7 +19,7 @@ def BuildAndDeployWebProject(project) {
     env.SERVER_PATH = 'n.test'
   } else if (BRANCH_NAME == 'dev') {
     // env.BUILD_SH = "cnpm run dev-dist:${project}"
-    env.BUILD_SH = "cd packages/${project} && cnpm run dev-dist"
+    env.BUILD_SH = "cd packages/${project} && cnpm i --registry=https://registry.npmmirror.com &&  cnpm run dev-dist"
     env.SERVER_PATH = 'n.dev'
   }
   env.DIST = "xzl-web-${project}"
