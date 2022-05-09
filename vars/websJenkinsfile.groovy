@@ -83,9 +83,9 @@ def call(params) {
                 projects.each({
                   if (env.GIT_CHANGE.contains(it) && !PNPM_INSTALLED) {
                     // pnpm@7.rc 版本有问题
-                    //sh 'npm i -g pnpm@6.32.4 --registry=https://registry.npmmirror.com'
-                    sh 'npm i -g cnpm --registry=https://registry.npmmirror.com'
-                    sh 'cnpm install --registry=https://registry.npmmirror.com'
+                    sh 'npm i -g pnpm@6.32.4 --registry=https://registry.npmmirror.com'
+                    // sh 'npm i -g cnpm --registry=https://registry.npmmirror.com'
+                    sh 'pnpm install --registry=https://registry.npmmirror.com'
                     PNPM_INSTALLED = true
                   }
                 })
